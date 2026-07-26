@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>METAR/TAF - FIR SPIM</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #333; min-height: 100vh; }
+.container { max-width: 960px; margin: 0 auto; padding: 20px; }
+.header { background: linear-gradient(135deg, #1a3a5c 0%, #2a6496 100%); color: #fff; padding: 24px 32px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 22px; font-weight: 600; }
+.header p { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+.status-bar { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.status-dot.green { background: #4caf50; }
+.status-dot.yellow { background: #ffc107; animation: pulse 1s infinite; }
+.status-dot.red { background: #f44336; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.summary { font-size: 13px; color: #666; margin-bottom: 12px; }
+.result-card { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 8px; overflow: hidden; }
+.result-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; cursor: pointer; user-select: none; }
+.result-header .code { font-family: 'Consolas', monospace; font-weight: 700; color: #2a6496; font-size: 15px; }
+.result-header .name { margin-left: 8px; font-weight: 500; color: #444; }
+.result-header .arrow { color: #999; font-size: 11px; transition: transform 0.2s; }
+.result-header .arrow.open { transform: rotate(180deg); }
+.result-body { border-top: 1px solid #eee; padding: 14px 20px; display: none; }
+.result-body.open { display: block; }
+.metar-line { font-family: 'Consolas', monospace; font-size: 13px; line-height: 1.6; padding: 10px 14px; border-radius: 6px; margin-bottom: 6px; word-break: break-word; }
+.metar-line:last-child { margin-bottom: 0; }
+.metar-line.metar { background: #e8f4fd; border-left: 4px solid #2a6496; }
+.metar-line.taf { background: #fef3e2; border-left: 4px solid #e67e22; }
+.label-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px; margin-bottom: 4px; letter-spacing: 0.5px; }
+.label-tag.metar-tag { background: #2a6496; color: #fff; }
+.label-tag.taf-tag { background: #e67e22; color: #fff; }
+.no-data { text-align: center; padding: 60px 20px; color: #999; }
+.no-data .icon { font-size: 48px; margin-bottom: 12px; }
+.error-box { background: #fde8e8; border: 1px solid #f5c6cb; border-radius: 8px; padding: 14px 18px; color: #c0392b; font-size: 14px; margin-bottom: 12px; }
+.footer { text-align: center; font-size: 12px; color: #999; padding: 20px 0; }
+.footer a { color: #2a6496; }
+@media (max-width: 600px) {
+  .container { padding: 12px; }
+  .header { padding: 16px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .header h1 { font-size: 18px; }
+  .result-body { padding: 10px 14px; }
+  .metar-line { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1> METAR / TAF - FIR SPIM</h1>
+      <p>Aeropuertos del Per&uacute; administrados por CORPAC S.A.</p>
+    </div>
+    <div class="status-bar">
+      <span class="status-dot green" id="statusDot"></span>
+      <span id="statusText">Actualizando...</span>
+    </div>
+  </div>
+
+  <div id="content"></div>
+
+  <div class="footer">
+    Datos proporcionados por <a href="https://meteorologia.corpac.gob.pe" target="_blank">CORPAC S.A.</a>
+    &middot; Actualizaci&oacute;n autom&aacute;tica cada 60s
+  </div>
+</div>
+
+<script>
+const API_URL = "/api/metar";
+const REFRESH_MS = 60000;
+const ALL_AIRPORTS = {{ airport_count }};
+
+function toggleBody(header) {
+  var body = header.nextElementSibling;
+  var arrow = header.querySelector(".arrow");
+  body.classList.toggle("open");
+  arrow.classList.toggle("open");
+}
+
+function formatTime(date) {
+  return date.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+
+function setStatus(type, msg) {
+  var dot = document.getElementById("statusDot");
+  var text = document.getElementById("statusText");
+  dot.className = "status-dot " + type;
+  text.textContent = msg;
+}
+
+function renderResults(data) {
+  var html = "";
+  var results = data.results || [];
+
+  if (results.length === 0) {
+    html = '<div class="no-data"><div class="icon">&#9729;</div>No hay datos disponibles</div>';
+    document.getElementById("content").innerHTML = html;
+    return;
+  }
+
+  html += '<div class="summary">' + results.length + ' de ' + ALL_AIRPORTS + ' aeropuertos &middot; ' + formatTime(new Date()) + '</div>';
+
+  for (var i = 0; i < results.length; i++) {
+    var r = results[i];
+    var hasTaf = r.taf && r.taf.length > 0;
+
+    html += '<div class="result-card">';
+    html += '  <div class="result-header" onclick="toggleBody(this)">';
+    html += '    <div><span class="code">' + r.code + '</span><span class="name">' + r.name + '</span></div>';
+    html += '    <span class="arrow">&#9660;</span>';
+    html += '  </div>';
+    html += '  <div class="result-body">';
+    html += '    <div class="metar-line metar"><span class="label-tag metar-tag">METAR</span><br>' + escapeHtml(r.metar) + '</div>';
+    if (hasTaf) {
+      html += '    <div class="metar-line taf"><span class="label-tag taf-tag">TAF</span><br>' + escapeHtml(r.taf) + '</div>';
+    }
+    html += '  </div>';
+    html += '</div>';
+  }
+
+  document.getElementById("content").innerHTML = html;
+}
+
+function escapeHtml(text) {
+  if (!text) return "";
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function fetchData() {
+  setStatus("yellow", "Actualizando...");
+  fetch(API_URL)
+    .then(function(r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(data) {
+      renderResults(data);
+      setStatus("green", "OK " + formatTime(new Date()));
+    })
+    .catch(function(err) {
+      setStatus("red", "Error: " + err.message);
+      document.getElementById("content").innerHTML =
+        '<div class="error-box">Error al obtener datos: ' + escapeHtml(err.message) + "</div>";
+    });
+}
+
+fetchData();
+setInterval(fetchData, REFRESH_MS);
+</script>
+</body>
+</html>
