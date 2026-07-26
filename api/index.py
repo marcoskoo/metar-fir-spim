@@ -94,10 +94,28 @@ def fetch_all_metar():
     all_results.sort(key=lambda r: ALL_AIRPORTS.index(r["code"]))
     return all_results
 
+NOTAM_API = "https://notam-alarm.up.railway.app"
+
 @app.route("/api/metar")
 def api_metar():
     results = fetch_all_metar()
     return jsonify({"results": results, "count": len(results), "total": len(ALL_AIRPORTS)})
+
+@app.route("/api/notams")
+def api_notams():
+    try:
+        resp = requests.get(f"{NOTAM_API}/notams", headers={"Accept": "application/json"}, timeout=25)
+        return jsonify(resp.json())
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 502
+
+@app.route("/api/notam-health")
+def api_notam_health():
+    try:
+        resp = requests.get(f"{NOTAM_API}/health", timeout=10)
+        return jsonify(resp.json())
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 502
 
 @app.route("/")
 def index():

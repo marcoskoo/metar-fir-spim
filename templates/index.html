@@ -2,150 +2,201 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>METAR/TAF - FIR SPIM</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FIR SPIM - METAR/TAF/NOTAM</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #333; min-height: 100vh; }
-.container { max-width: 960px; margin: 0 auto; padding: 20px; }
-.header { background: linear-gradient(135deg, #1a3a5c 0%, #2a6496 100%); color: #fff; padding: 24px 32px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
-.header h1 { font-size: 22px; font-weight: 600; }
-.header p { font-size: 13px; opacity: 0.85; margin-top: 4px; }
-.status-bar { display: flex; align-items: center; gap: 10px; font-size: 13px; }
-.status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-.status-dot.green { background: #4caf50; }
-.status-dot.yellow { background: #ffc107; animation: pulse 1s infinite; }
-.status-dot.red { background: #f44336; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-.summary { font-size: 13px; color: #666; margin-bottom: 12px; }
-.result-card { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 8px; overflow: hidden; }
-.result-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; cursor: pointer; user-select: none; }
-.result-header .code { font-family: 'Consolas', monospace; font-weight: 700; color: #2a6496; font-size: 15px; }
-.result-header .name { margin-left: 8px; font-weight: 500; color: #444; }
-.result-header .arrow { color: #999; font-size: 11px; transition: transform 0.2s; }
-.result-header .arrow.open { transform: rotate(180deg); }
-.result-body { border-top: 1px solid #eee; padding: 14px 20px; display: none; }
-.result-body.open { display: block; }
-.metar-line { font-family: 'Consolas', monospace; font-size: 13px; line-height: 1.6; padding: 10px 14px; border-radius: 6px; margin-bottom: 6px; word-break: break-word; }
-.metar-line:last-child { margin-bottom: 0; }
-.metar-line.metar { background: #e8f4fd; border-left: 4px solid #2a6496; }
-.metar-line.taf { background: #fef3e2; border-left: 4px solid #e67e22; }
-.label-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px; margin-bottom: 4px; letter-spacing: 0.5px; }
-.label-tag.metar-tag { background: #2a6496; color: #fff; }
-.label-tag.taf-tag { background: #e67e22; color: #fff; }
-.no-data { text-align: center; padding: 60px 20px; color: #999; }
-.no-data .icon { font-size: 48px; margin-bottom: 12px; }
-.error-box { background: #fde8e8; border: 1px solid #f5c6cb; border-radius: 8px; padding: 14px 18px; color: #c0392b; font-size: 14px; margin-bottom: 12px; }
-.footer { text-align: center; font-size: 12px; color: #999; padding: 20px 0; }
-.footer a { color: #2a6496; }
-@media (max-width: 600px) {
-  .container { padding: 12px; }
-  .header { padding: 16px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
-  .header h1 { font-size: 18px; }
-  .result-body { padding: 10px 14px; }
-  .metar-line { font-size: 11px; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#333}
+.c{max-width:1100px;margin:0 auto;padding:16px}
+.hd{background:linear-gradient(135deg,#1a3a5c,#2a6496);color:#fff;padding:18px 24px;border-radius:12px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.hd h1{font-size:20px;font-weight:600}
+.hd p{font-size:12px;opacity:.8}
+.st{display:flex;align-items:center;gap:8px;font-size:12px}
+.ct{width:9px;height:9px;border-radius:50%;display:inline-block}
+.ct.g{background:#4caf50}.ct.y{background:#ffc107;animation:pl 1s infinite}.ct.r{background:#f44336}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:.3}}
+.tabs{display:flex;gap:4px;margin-bottom:14px;background:#fff;border-radius:10px;padding:4px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.tab{padding:9px 20px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#666;transition:all .15s}
+.tab:hover{background:#f0f4ff}
+.tab.act{background:#2a6496;color:#fff}
+.tab .badge{background:#e03050;color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;margin-left:5px}
+.sb{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.sb input{flex:1;min-width:180px;padding:8px 12px;border:2px solid #ddd;border-radius:8px;font-size:13px;font-family:'Consolas',monospace;outline:none;transition:border-color .2s}
+.sb input:focus{border-color:#2a6496}
+.sb input::placeholder{font-family:'Segoe UI',Arial,sans-serif;color:#aaa}
+.tg{cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;border:2px solid #ddd;background:#fff;color:#555;transition:all .15s;white-space:nowrap}
+.tg:hover{border-color:#2a6496;color:#2a6496}
+.tg.on{background:#2a6496;border-color:#2a6496;color:#fff}
+.sm{font-size:12px;color:#888;margin-bottom:10px}
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:6px;overflow:hidden}
+.ch{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;cursor:pointer;user-select:none}
+.ch:hover{background:#fafbfc}
+.co{font-family:'Consolas',monospace;font-weight:700;color:#2a6496;font-size:14px}
+.nn{margin-left:6px;font-weight:500;color:#444;font-size:13px}
+.ar{color:#bbb;font-size:10px;transition:transform .2s}
+.ar.o{transform:rotate(180deg)}
+.bd{border-top:1px solid #eee;padding:12px 16px;display:none}
+.bd.o{display:block}
+.ln{font-family:'Consolas',monospace;font-size:12px;line-height:1.6;padding:8px 12px;border-radius:6px;margin-bottom:4px;word-break:break-word}
+.ln:last-child{margin-bottom:0}
+.ln.m{background:#e8f4fd;border-left:3px solid #2a6496}
+.ln.t{background:#fef3e2;border-left:3px solid #e67e22}
+.ln.r{background:#f8f9fa;border-left:3px solid #6c757d;font-size:11px;white-space:pre-wrap}
+.tg2{display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;margin-bottom:3px;letter-spacing:.3px}
+.tg2.m{background:#2a6496;color:#fff}
+.tg2.t{background:#e67e22;color:#fff}
+.tg2.r{background:#6c757d;color:#fff}
+.tg2.n{background:#7c3aed;color:#fff}
+.em{text-align:center;padding:50px 20px;color:#999}
+.em .ic{font-size:40px;margin-bottom:10px}
+.er{background:#fde8e8;border:1px solid #f5c6cb;border-radius:8px;padding:12px 16px;color:#c0392b;font-size:13px;margin-bottom:10px}
+.ft{text-align:center;font-size:11px;color:#999;padding:16px 0}
+.ft a{color:#2a6496}
+.aero-grp{margin-bottom:16px}
+.aero-grp-hdr{padding:8px 14px;background:#f0f4ff;border-radius:8px 8px 0 0;font-size:13px;font-weight:700;color:#1a3a5c;border-bottom:2px solid #2a6496;display:flex;justify-content:space-between;align-items:center}
+.aero-grp-hdr .acnt{font-size:11px;color:#666;font-weight:400}
+.nc{border-left:4px solid #7c3aed}
+@media(max-width:600px){
+.c{padding:10px}.hd{padding:14px 16px}.hd h1{font-size:16px}
+.tab{padding:7px 12px;font-size:12px}.sb input{min-width:120px;font-size:12px}
+.bd{padding:10px 12px}.ln{font-size:11px}
 }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div>
-      <h1> METAR / TAF - FIR SPIM</h1>
-      <p>Aeropuertos del Per&uacute; administrados por CORPAC S.A.</p>
-    </div>
-    <div class="status-bar">
-      <span class="status-dot green" id="statusDot"></span>
-      <span id="statusText">Actualizando...</span>
-    </div>
-  </div>
+<div class="c">
+<div class="hd">
+<div><h1>FIR SPIM</h1><p>METAR / TAF / NOTAM &middot; CORPAC S.A.</p></div>
+<div class="st"><span class="ct g" id="dot"></span><span id="st">Cargando...</span></div>
+</div>
 
-  <div id="content"></div>
+<div class="tabs" id="tabs">
+<button class="tab act" data-tab="metar" onclick="switchTab('metar')">METAR/TAF</button>
+<button class="tab" data-tab="notam" onclick="switchTab('notam')">NOTAM</button>
+</div>
 
-  <div class="footer">
-    Datos proporcionados por <a href="https://meteorologia.corpac.gob.pe" target="_blank">CORPAC S.A.</a>
-    &middot; Actualizaci&oacute;n autom&aacute;tica cada 60s
-  </div>
+<div class="sb" id="filterBar">
+<input type="text" id="fAero" placeholder="Filtrar por aeropuerto (SPJC, SPQT...)" oninput="render()">
+<input type="text" id="fText" placeholder="Buscar en texto..." oninput="render()" style="display:none">
+<span class="tg" id="rawToggle" onclick="toggleRaw()">Crudo</span>
+</div>
+
+<div id="content"></div>
+<div class="ft">
+Datos: <a href="https://meteorologia.corpac.gob.pe" target="_blank">CORPAC</a> &middot;
+NOTAM: <a href="https://notam-alarm.up.railway.app" target="_blank">NOTAM Alarm</a> &middot;
+Auto-actualizaci&oacute;n cada 60s
+</div>
 </div>
 
 <script>
-const API_URL = "/api/metar";
-const REFRESH_MS = 60000;
-const ALL_AIRPORTS = {{ airport_count }};
+var TOTAL={{ airport_count }};
+var metarData={results:[],count:0,total:TOTAL};
+var notamData={notams:[]};
+var activeTab='metar';
+var showRaw=false;
+var refreshInterval;
 
-function toggleBody(header) {
-  var body = header.nextElementSibling;
-  var arrow = header.querySelector(".arrow");
-  body.classList.toggle("open");
-  arrow.classList.toggle("open");
+function fmt(d){return d.toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+function st(t,m){document.getElementById('dot').className='ct '+t;document.getElementById('st').textContent=m}
+function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function tg(h){var b=h.nextElementSibling;var a=h.querySelector('.ar');b.classList.toggle('o');a.classList.toggle('o')}
+
+function toggleRaw(){
+  showRaw=!showRaw;
+  document.getElementById('rawToggle').classList.toggle('on',showRaw);
+  render();
 }
 
-function formatTime(date) {
-  return date.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+function switchTab(tab){
+  activeTab=tab;
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('act',t.dataset.tab===tab)});
+  document.getElementById('fText').style.display=(tab==='notam')?'block':'none';
+  render();
 }
 
-function setStatus(type, msg) {
-  var dot = document.getElementById("statusDot");
-  var text = document.getElementById("statusText");
-  dot.className = "status-dot " + type;
-  text.textContent = msg;
+function filterAirport(r){
+  var q=document.getElementById('fAero').value.trim().toUpperCase();
+  if(!q)return true;
+  return r.code.indexOf(q)!==-1||(r.name||'').toUpperCase().indexOf(q)!==-1;
 }
 
-function renderResults(data) {
-  var html = "";
-  var results = data.results || [];
+function filterText(r){
+  var q=document.getElementById('fText').value.trim().toLowerCase();
+  if(!q)return true;
+  return (r.raw_text||r.metar||r.taf||'').toLowerCase().indexOf(q)!==-1;
+}
 
-  if (results.length === 0) {
-    html = '<div class="no-data"><div class="icon">&#9729;</div>No hay datos disponibles</div>';
-    document.getElementById("content").innerHTML = html;
-    return;
-  }
-
-  html += '<div class="summary">' + results.length + ' de ' + ALL_AIRPORTS + ' aeropuertos &middot; ' + formatTime(new Date()) + '</div>';
-
-  for (var i = 0; i < results.length; i++) {
-    var r = results[i];
-    var hasTaf = r.taf && r.taf.length > 0;
-
-    html += '<div class="result-card">';
-    html += '  <div class="result-header" onclick="toggleBody(this)">';
-    html += '    <div><span class="code">' + r.code + '</span><span class="name">' + r.name + '</span></div>';
-    html += '    <span class="arrow">&#9660;</span>';
-    html += '  </div>';
-    html += '  <div class="result-body">';
-    html += '    <div class="metar-line metar"><span class="label-tag metar-tag">METAR</span><br>' + escapeHtml(r.metar) + '</div>';
-    if (hasTaf) {
-      html += '    <div class="metar-line taf"><span class="label-tag taf-tag">TAF</span><br>' + escapeHtml(r.taf) + '</div>';
+function renderMetar(){
+  var h='';var r=metarData.results||[];
+  r=r.filter(filterAirport);
+  if(!r.length){h='<div class="em"><div class="ic">&#9729;</div>No hay datos</div>';document.getElementById('content').innerHTML=h;return}
+  h+='<div class="sm">'+r.length+' de '+metarData.total+' aeropuertos</div>';
+  for(var i=0;i<r.length;i++){
+    var o=r[i];
+    h+='<div class="card"><div class="ch" onclick="tg(this)"><div><span class="co">'+esc(o.code)+'</span><span class="nn">'+esc(o.name)+'</span></div><span class="ar">&#9660;</span></div>';
+    h+='<div class="bd">';
+    if(showRaw){
+      h+='<div class="ln r"><span class="tg2 r">RAW</span><br>'+esc(o.metar)+'</div>';
+      if(o.taf)h+='<div class="ln r"><span class="tg2 r">RAW TAF</span><br>'+esc(o.taf)+'</div>';
+    }else{
+      h+='<div class="ln m"><span class="tg2 m">METAR</span><br>'+esc(o.metar)+'</div>';
+      if(o.taf)h+='<div class="ln t"><span class="tg2 t">TAF</span><br>'+esc(o.taf)+'</div>';
     }
-    html += '  </div>';
-    html += '</div>';
-  }
-
-  document.getElementById("content").innerHTML = html;
+    h+='</div></div>';}
+  document.getElementById('content').innerHTML=h;
 }
 
-function escapeHtml(text) {
-  if (!text) return "";
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function renderNotam(){
+  var h='';var items=notamData.notams||[];
+  items=items.filter(function(n){return filterText(n)&&filterAirport(n)});
+  if(!items.length){h='<div class="em"><div class="ic">&#9992;</div>No hay NOTAMs</div>';document.getElementById('content').innerHTML=h;return}
+  var grp={};
+  var codes=[];
+  items.forEach(function(n){
+    var c=n.location||'ZZZZ';
+    if(!grp[c]){grp[c]=[];codes.push(c)}
+    grp[c].push(n);
+  });
+  codes.sort();
+  h+='<div class="sm">'+items.length+' NOTAMs en '+codes.length+' aer&oacute;dromos</div>';
+  for(var ci=0;ci<codes.length;ci++){
+    var cc=codes[ci];var nn=grp[cc];
+    h+='<div class="aero-grp"><div class="aero-grp-hdr"><span>'+esc(cc)+'</span><span class="acnt">'+nn.length+' NOTAMs</span></div>';
+    for(var ni=0;ni<nn.length;ni++){
+      var n=nn[ni];
+      h+='<div class="card nc"><div class="ch" onclick="tg(this)"><div><span class="co">'+esc(n.id||'')+'</span></div><span class="ar">&#9660;</span></div>';
+      h+='<div class="bd">';
+      if(showRaw){
+        h+='<div class="ln r"><span class="tg2 r">RAW</span><br>'+esc(n.raw_text||n.text||'')+'</div>';
+      }else{
+        h+='<div class="ln r" style="background:#f5f3ff;border-left-color:#7c3aed">'+esc(n.raw_text||n.text||'')+'</div>';
+      }
+      h+='</div></div>';}
+    h+='</div>';}
+  document.getElementById('content').innerHTML=h;
 }
 
-function fetchData() {
-  setStatus("yellow", "Actualizando...");
-  fetch(API_URL)
-    .then(function(r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-    .then(function(data) {
-      renderResults(data);
-      setStatus("green", "OK " + formatTime(new Date()));
-    })
-    .catch(function(err) {
-      setStatus("red", "Error: " + err.message);
-      document.getElementById("content").innerHTML =
-        '<div class="error-box">Error al obtener datos: ' + escapeHtml(err.message) + "</div>";
-    });
+function render(){
+  if(activeTab==='metar')renderMetar();else renderNotam();
 }
 
-fetchData();
-setInterval(fetchData, REFRESH_MS);
+function fetchMetar(){
+  fetch('/api/metar').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){metarData=d;if(activeTab==='metar')render();st('g','METAR OK '+fmt(new Date()))}).catch(function(e){st('r','METAR: '+e.message)})
+}
+
+function fetchNotam(){
+  fetch('/api/notams').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){notamData=d;if(activeTab==='notam')render();st('g','NOTAM OK '+fmt(new Date()))}).catch(function(e){st('r','NOTAM: '+e.message)})
+}
+
+function refresh(){
+  if(activeTab==='metar'){st('y','Actualizando METAR...');fetchMetar()}
+  else{st('y','Actualizando NOTAM...');fetchNotam()}
+}
+
+fetchMetar();
+fetchNotam();
+refreshInterval=setInterval(refresh,60000);
 </script>
 </body>
 </html>
