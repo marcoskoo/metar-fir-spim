@@ -41,7 +41,7 @@ body{font-family:'Courier New',Consolas,monospace;background:#0d1117;color:#c9d1
 <div><h1># FIR SPIM</h1><p>METAR / TAF / NOTAM &middot; datos crudos</p></div>
 <div class="st"><span class="ct g" id="dot"></span><span id="st">cargando...</span></div>
 </div>
-<div class="sb"><input type="text" id="f" placeholder="filtrar por aerodromo (SPJC, SPQT, lima...)" oninput="render()"></div>
+<div class="sb"><input type="text" id="f" placeholder="filtrar: SPJC,SPQT  o  lima,iquitos  (varios separados por , ; . o espacio)" oninput="render()"></div>
 <div id="x"></div>
 <div class="ft">
 <a href="https://github.com/marcoskoo/metar-fir-spim">github</a> &middot;
@@ -62,8 +62,9 @@ function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;
 function filt(r){
   var q=document.getElementById('f').value.trim().toLowerCase();
   if(!q)return true;
+  var qs=q.split(/[,;\s.]+/).map(function(s){return s.trim()}).filter(function(s){return s});
   var c=(r.code||r.location||r.name||'').toLowerCase();
-  return c.indexOf(q)!==-1;
+  return qs.some(function(qi){return c.indexOf(qi)!==-1});
 }
 
 function render(){
