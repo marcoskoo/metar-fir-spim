@@ -2,9 +2,11 @@ from flask import Flask, render_template, request, jsonify
 import requests
 from bs4 import BeautifulSoup
 import re
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-app = Flask(__name__, template_folder="../templates", static_folder="../static")
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+app = Flask(__name__, template_folder=os.path.join(ROOT, "templates"), static_folder=os.path.join(ROOT, "static"))
 
 CORPAC_URL = "https://meteorologia.corpac.gob.pe/app/Meteorologia/tiempo/manualMetar.php"
 
