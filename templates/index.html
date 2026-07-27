@@ -8,49 +8,49 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Courier New',Consolas,monospace;background:#0d1117;color:#c9d1d9;font-size:13px;line-height:1.5}
 .c{max-width:1200px;margin:0 auto;padding:12px}
-.hd{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.hd h1{color:#58a6ff;font-size:16px;font-weight:400}
-.hd p{color:#8b949e;font-size:11px}
-.st{display:flex;align-items:center;gap:6px;font-size:11px;color:#8b949e}
-.ct{width:8px;height:8px;border-radius:50%;display:inline-block}
+.hd{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.hd h1{color:#58a6ff;font-size:15px;font-weight:400}
+.hd p{color:#8b949e;font-size:10px}
+.st{display:flex;align-items:center;gap:6px;font-size:10px;color:#8b949e}
+.ct{width:7px;height:7px;border-radius:50%;display:inline-block}
 .ct.g{background:#3fb950}.ct.y{background:#d29922}.ct.r{background:#f85149}
-.sb{margin-bottom:10px}
-.sb input{width:100%;padding:7px 10px;background:#0d1117;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-family:'Courier New',monospace;font-size:12px;outline:none}
-.sb input:focus{border-color:#58a6ff}
-.sb input::placeholder{color:#484f58}
-.sm{color:#8b949e;font-size:11px;padding:6px 0;border-bottom:1px solid #21262d;margin-bottom:8px}
-.sc{color:#58a6ff;font-size:13px;font-weight:600;padding:8px 0 4px;border-bottom:1px solid #21262d;margin-bottom:6px;margin-top:14px}
-.grp{margin-bottom:4px}
-.grp-hdr{color:#f0f6fc;background:#161b22;padding:5px 10px;border:1px solid #30363d;border-radius:4px;margin-bottom:2px;font-size:12px;display:flex;justify-content:space-between}
-.grp-hdr .ac{color:#8b949e;font-size:11px}
-.ln{padding:4px 10px;white-space:pre-wrap;word-break:break-word;color:#c9d1d9;border-left:2px solid #30363d;margin-left:4px;margin-bottom:2px;font-size:12px}
-.ln.m{border-left-color:#58a6ff}
-.ln.t{border-left-color:#d29922}
-.ln.n{border-left-color:#bc8cff}
-.ft{text-align:center;font-size:10px;color:#484f58;padding:16px 0;border-top:1px solid #21262d;margin-top:12px}
+.fb{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;padding:6px 8px;background:#161b22;border:1px solid #30363d;border-radius:6px}
+.fb input,.fb select{padding:4px 8px;background:#0d1117;border:1px solid #30363d;border-radius:4px;color:#c9d1d9;font-family:'Courier New',monospace;font-size:10px;outline:none;min-width:0}
+.fb input:focus,.fb select:focus{border-color:#58a6ff}
+.fb input::placeholder{color:#484f58}
+.fb label{color:#8b949e;font-size:10px;display:flex;align-items:center;gap:3px}
+.fb .sp{color:#30363d;font-size:10px;user-select:none}
+.sm{color:#8b949e;font-size:10px;padding:4px 0;border-bottom:1px solid #21262d;margin-bottom:6px}
+.sc{color:#58a6ff;font-size:12px;font-weight:600;padding:6px 0 3px;border-bottom:1px solid #21262d;margin-bottom:5px;margin-top:10px}
+.grp{margin-bottom:3px}
+.grp-hdr{color:#f0f6fc;background:#161b22;padding:4px 8px;border:1px solid #30363d;border-radius:4px;margin-bottom:2px;font-size:11px;display:flex;justify-content:space-between}
+.grp-hdr .ac{color:#8b949e;font-size:10px}
+.ln{padding:3px 8px;white-space:pre-wrap;word-break:break-word;color:#c9d1d9;border-left:2px solid #30363d;margin-left:4px;margin-bottom:1px;font-size:11px}
+.ln.m{border-left-color:#58a6ff}.ln.t{border-left-color:#d29922}.ln.n{border-left-color:#bc8cff}
+.ft{text-align:center;font-size:9px;color:#484f58;padding:12px 0;border-top:1px solid #21262d;margin-top:10px}
 .ft a{color:#58a6ff}
-.em{color:#484f58;text-align:center;padding:30px 0;font-size:12px}
-.btn{background:#21262d;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;padding:4px 12px;font-family:inherit;font-size:11px;cursor:pointer}
+.em{color:#484f58;text-align:center;padding:24px 0;font-size:11px}
+.btn{background:#21262d;color:#c9d1d9;border:1px solid #30363d;border-radius:4px;padding:3px 10px;font-family:inherit;font-size:10px;cursor:pointer;white-space:nowrap}
 .btn:hover{background:#30363d}
-.hd-acts{display:flex;align-items:center;gap:6px}
+.btn.act{background:#58a6ff;color:#0d1117;border-color:#58a6ff}
+.hd-acts{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
 @media print{
-body{background:#fff;color:#000;font-size:10px}
+body{background:#fff;color:#000;font-size:9px}
 .c{max-width:100%;padding:0}
-.hd{background:#fff;border:none;border-bottom:2px solid #000;padding:0 0 8px;margin-bottom:8px}
-.hd h1{color:#000;font-size:14px}.hd p{color:#555}
-.st,.btn,#f,.sb,.ft,.ct{display:none!important}
-.sc{color:#000;font-size:11px;border-bottom-color:#ccc;margin-top:8px}
-.sm{color:#555;border-bottom-color:#ddd;font-size:9px}
-.grp-hdr{background:#f5f5f5;border-color:#ccc;color:#000;font-size:10px}
+.hd{background:#fff;border:none;border-bottom:2px solid #000;padding:0 0 6px;margin-bottom:6px}
+.hd h1{color:#000;font-size:13px}.hd p{color:#555}
+.st,.btn,.fb,.ft,.ct{display:none!important}
+.sc{color:#000;font-size:10px;border-bottom-color:#ccc;margin-top:6px}
+.sm{color:#555;border-bottom-color:#ddd;font-size:8px}
+.grp-hdr{background:#f5f5f5;border-color:#ccc;color:#000;font-size:9px}
 .grp-hdr .ac{color:#666}
-.ln{color:#000;border-left-color:#ccc;font-size:9px;padding:2px 8px}
-.ln.m{border-left-color:#333}
-.ln.t{border-left-color:#999}
-.ln.n{border-left-color:#888}
+.ln{color:#000;border-left-color:#ccc;font-size:8px;padding:2px 6px}
+.ln.m{border-left-color:#333}.ln.t{border-left-color:#999}.ln.n{border-left-color:#888}
 .ft{display:none!important}
 }
 @media(max-width:600px){
-.c{padding:8px}.hd{padding:10px 12px}.hd h1{font-size:14px}.ln{font-size:11px;padding:3px 8px}
+.c{padding:6px}.hd{padding:8px 10px}.hd h1{font-size:13px}.ln{font-size:10px;padding:2px 6px}
+.fb{padding:4px 6px}.fb input,.fb select{font-size:9px}
 }
 </style>
 </head>
@@ -59,11 +59,25 @@ body{background:#fff;color:#000;font-size:10px}
 <div class="hd">
 <div><h1># FIR SPIM</h1><p>METAR / TAF / NOTAM &middot; datos crudos</p></div>
 <div class="hd-acts">
-<button class="btn" onclick="window.print()"> imprimir reporte</button>
+<button class="btn" onclick="toggleFiltros()"> filtros</button>
+<button class="btn" onclick="window.print()"> imprimir</button>
 <div class="st"><span class="ct g" id="dot"></span><span id="st">cargando...</span></div>
 </div>
 </div>
-<div class="sb"><input type="text" id="f" placeholder="filtrar: SPJC,SPQT  o  lima,iquitos  (varios separados por , ; . o espacio)" oninput="render()"></div>
+
+<div class="fb" id="filtros" style="display:none">
+<label>aerodromo <input type="text" id="fAero" placeholder="SPJC,SPQT..." style="width:120px" oninput="render()"></label>
+<span class="sp">|</span>
+<label>Q code <input type="text" id="fQ" placeholder="QFAXX, QLCAS..." style="width:110px" oninput="render()"></label>
+<span class="sp">|</span>
+<label>E) texto <input type="text" id="fE" placeholder="RWY, ILS..." style="width:110px" oninput="render()"></label>
+<span class="sp">|</span>
+<label>emitido desde <input type="date" id="fDesde" oninput="render()"></label>
+<label>hasta <input type="date" id="fHasta" oninput="render()"></label>
+<span class="sp">|</span>
+<button class="btn" id="btnUltimo" onclick="toggleUltimo()">ultimo emitido</button>
+</div>
+
 <div id="x"></div>
 <div class="ft">
 <a href="https://github.com/marcoskoo/metar-fir-spim">github</a> &middot;
@@ -76,45 +90,86 @@ actualiza cada 60s
 var TOTAL={{ airport_count }};
 var M={results:[],count:0,total:TOTAL};
 var N={notams:[]};
+var soloUltimo=false;
+var filtrosVis=false;
 
 function fmt(d){return d.toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
 function st(t,m){document.getElementById('dot').className='ct '+t;document.getElementById('st').textContent=m}
 function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function toggleFiltros(){filtrosVis=!filtrosVis;document.getElementById('filtros').style.display=filtrosVis?'flex':'none'}
+function toggleUltimo(){soloUltimo=!soloUltimo;document.getElementById('btnUltimo').classList.toggle('act',soloUltimo);render()}
 
-function filt(r){
-  var q=document.getElementById('f').value.trim().toLowerCase();
+function parseNotam(r){
+  var t=r.raw_text||r.text||'';
+  var out={code:r.location||'ZZZZ',id:r.id||'',raw:t};
+  var m;
+  m=t.match(/Q\)\s*(\S+)/); out.q=m?m[1]:'';
+  m=t.match(/E\)\s*([\s\S]*?)(?:\n[A-Z]\)|$)/); out.e=m?m[1].trim():'';
+  m=t.match(/B\)\s*(\d{10})/); out.b=m?m[1]:'';
+  m=t.match(/C\)\s*(\d{10})/); out.c=m?m[1]:'';
+  m=t.match(/A\)\s*(\S+)/); out.a=m?m[1]:'';
+  out.bDt=out.b?new Date(20+out.b.slice(0,2),out.b.slice(2,4)-1,out.b.slice(4,6),out.b.slice(6,8),out.b.slice(8,10)):null;
+  out.cDt=out.c?new Date(20+out.c.slice(0,2),out.c.slice(2,4)-1,out.c.slice(4,6),out.c.slice(6,8),out.c.slice(8,10)):null;
+  return out;
+}
+
+function filtAero(r){
+  var q=document.getElementById('fAero').value.trim().toLowerCase();
   if(!q)return true;
-  var qs=q.split(/[,;\s.]+/).map(function(s){return s.trim()}).filter(function(s){return s});
-  var c=(r.code||r.location||r.name||'').toLowerCase();
-  return qs.some(function(qi){return c.indexOf(qi)!==-1});
+  return q.split(/[,;\s.]+/).some(function(s){return s&&(r.code||'').toLowerCase().indexOf(s)!==-1})
+}
+function filtQ(r){
+  var q=document.getElementById('fQ').value.trim().toLowerCase();
+  if(!q)return true;
+  return q.split(/[,;\s.]+/).some(function(s){return s&&r.q.toLowerCase().indexOf(s)!==-1})
+}
+function filtE(r){
+  var q=document.getElementById('fE').value.trim().toLowerCase();
+  if(!q)return true;
+  return q.split(/[,;\s.]+/).some(function(s){return s&&r.e.toLowerCase().indexOf(s)!==-1})
+}
+function filtFecha(r){
+  var d=document.getElementById('fDesde').value;
+  var h=document.getElementById('fHasta').value;
+  if(!d&&!h)return true;
+  var dt=r.bDt||r.cDt; if(!dt)return true;
+  var ts=dt.getTime();
+  if(d){var dd=new Date(d+'T00:00:00');if(ts<dd.getTime())return false}
+  if(h){var hh=new Date(h+'T23:59:59');if(ts>hh.getTime())return false}
+  return true;
 }
 
 function render(){
-  var h='';var aero=M.results||[];var nota=N.notams||[];
-  var fa=aero.filter(filt);
+  var h='';var aero=M.results||[];
   h+='<div class="sc">;; METAR / TAF</div>';
+  var fa=aero.filter(function(r){
+    var q=document.getElementById('fAero').value.trim().toLowerCase();
+    if(!q)return true;
+    return q.split(/[,;\s.]+/).some(function(s){return s&&(r.code||'').toLowerCase().indexOf(s)!==-1})
+  });
   if(fa.length){
     h+='<div class="sm">'+fa.length+' aeropuertos</div>';
-    for(var i=0;i<fa.length;i++){
-      var o=fa[i];
+    for(var i=0;i<fa.length;i++){var o=fa[i];
       h+='<div class="grp"><div class="grp-hdr"><span>'+esc(o.code)+' '+esc(o.name)+'</span></div>';
       h+='<div class="ln m">'+esc(o.metar)+'</div>';
-      if(o.taf)h+='<div class="ln t">'+esc(o.taf)+'</div>';
-      h+='</div>';}
+      if(o.taf)h+='<div class="ln t">'+esc(o.taf)+'</div></div>';}
   }else{h+='<div class="em">sin datos</div>';}
 
-  var fn=nota.filter(filt);
+  var nota=N.notams||[];
+  var pn=nota.map(parseNotam).filter(function(r){return filtAero(r)&&filtQ(r)&&filtE(r)&&filtFecha(r)});
+  if(soloUltimo){
+    var ult={};pn.forEach(function(r){var c=r.code;if(!ult[c]||(r.bDt&&r.bDt>ult[c].bDt))ult[c]=r});
+    pn=Object.keys(ult).map(function(k){return ult[k]});
+  }
   h+='<div class="sc">;; NOTAM</div>';
-  if(fn.length){
+  if(pn.length){
     var grp={},codes=[];
-    fn.forEach(function(n){var c=n.location||'ZZZZ';if(!grp[c]){grp[c]=[];codes.push(c)}grp[c].push(n)});
+    pn.forEach(function(n){var c=n.code;if(!grp[c]){grp[c]=[];codes.push(c)}grp[c].push(n)});
     codes.sort();
-    h+='<div class="sm">'+fn.length+' NOTAMs en '+codes.length+' aerodromos</div>';
-    for(var ci=0;ci<codes.length;ci++){
-      var cc=codes[ci],nn=grp[cc];
+    h+='<div class="sm">'+pn.length+' NOTAMs en '+codes.length+' aerodromos</div>';
+    for(var ci=0;ci<codes.length;ci++){var cc=codes[ci],nn=grp[cc];
       h+='<div class="grp"><div class="grp-hdr"><span>'+esc(cc)+'</span><span class="ac">'+nn.length+' NOTAMs</span></div>';
-      for(var ni=0;ni<nn.length;ni++){
-        h+='<div class="ln n">'+esc(nn[ni].raw_text||nn[ni].text||nn[ni].id||'')+'</div>';}
+      for(var ni=0;ni<nn.length;ni++){h+='<div class="ln n">'+esc(nn[ni].raw)+'</div>';}
       h+='</div>';}
   }else{h+='<div class="em">sin datos</div>';}
   document.getElementById('x').innerHTML=h;
