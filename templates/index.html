@@ -134,7 +134,7 @@ function filtFecha(r){
   var d=document.getElementById('fDesde').value;
   var h=document.getElementById('fHasta').value;
   if(!d&&!h)return true;
-  var dt=r.bDt||r.cDt; if(!dt)return true;
+  var dt=r.pub; if(!dt)return true;
   var ts=dt.getTime();
   if(d){var dd=new Date(d+'T00:00:00');if(ts<dd.getTime())return false}
   if(h){var hh=new Date(h+'T23:59:59');if(ts>hh.getTime())return false}
