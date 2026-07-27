@@ -158,19 +158,25 @@ function render(){
   var nota=N.notams||[];
   var pn=nota.map(parseNotam).filter(function(r){return filtAero(r)&&filtQ(r)&&filtE(r)&&filtFecha(r)});
   if(soloUltimo){
-    var ult={};pn.forEach(function(r){var c=r.code;if(!ult[c]||(r.bDt&&r.bDt>ult[c].bDt))ult[c]=r});
-    pn=Object.keys(ult).map(function(k){return ult[k]});
+    pn.sort(function(a,b){var da=a.bDt?a.bDt.getTime():0,db=b.bDt?b.bDt.getTime():0;return db-da});
   }
   h+='<div class="sc">;; NOTAM</div>';
   if(pn.length){
-    var grp={},codes=[];
-    pn.forEach(function(n){var c=n.code;if(!grp[c]){grp[c]=[];codes.push(c)}grp[c].push(n)});
-    codes.sort();
-    h+='<div class="sm">'+pn.length+' NOTAMs en '+codes.length+' aerodromos</div>';
-    for(var ci=0;ci<codes.length;ci++){var cc=codes[ci],nn=grp[cc];
-      h+='<div class="grp"><div class="grp-hdr"><span>'+esc(cc)+'</span><span class="ac">'+nn.length+' NOTAMs</span></div>';
-      for(var ni=0;ni<nn.length;ni++){h+='<div class="ln n">'+esc(nn[ni].raw)+'</div>';}
-      h+='</div>';}
+    if(soloUltimo){
+      h+='<div class="sm">'+pn.length+' NOTAMs ordenados del mas reciente al mas antiguo</div>';
+      for(var si=0;si<pn.length;si++){var s=pn[si];
+        h+='<div class="grp"><div class="grp-hdr"><span>'+esc(s.code)+' &middot; '+esc(s.id)+'</span><span class="ac">'+(s.bDt?esc(s.bDt.toISOString().slice(0,10)):'')+'</span></div>';
+        h+='<div class="ln n">'+esc(s.raw)+'</div></div>';}
+    }else{
+      var grp={},codes=[];
+      pn.forEach(function(n){var c=n.code;if(!grp[c]){grp[c]=[];codes.push(c)}grp[c].push(n)});
+      codes.sort();
+      h+='<div class="sm">'+pn.length+' NOTAMs en '+codes.length+' aerodromos</div>';
+      for(var ci=0;ci<codes.length;ci++){var cc=codes[ci],nn=grp[cc];
+        h+='<div class="grp"><div class="grp-hdr"><span>'+esc(cc)+'</span><span class="ac">'+nn.length+' NOTAMs</span></div>';
+        for(var ni=0;ni<nn.length;ni++){h+='<div class="ln n">'+esc(nn[ni].raw)+'</div>';}
+        h+='</div>';}
+    }
   }else{h+='<div class="em">sin datos</div>';}
   document.getElementById('x').innerHTML=h;
 }
