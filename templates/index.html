@@ -110,6 +110,8 @@ function parseNotam(r){
   m=t.match(/A\)\s*(\S+)/); out.a=m?m[1]:'';
   out.bDt=out.b?new Date(20+out.b.slice(0,2),out.b.slice(2,4)-1,out.b.slice(4,6),out.b.slice(6,8),out.b.slice(8,10)):null;
   out.cDt=out.c?new Date(20+out.c.slice(0,2),out.c.slice(2,4)-1,out.c.slice(4,6),out.c.slice(6,8),out.c.slice(8,10)):null;
+  m=t.match(/^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})/);
+  out.pub=m?new Date(+m[3],m[2]-1,+m[1],+m[4],+m[5],+m[6]):null;
   return out;
 }
 
@@ -158,14 +160,14 @@ function render(){
   var nota=N.notams||[];
   var pn=nota.map(parseNotam).filter(function(r){return filtAero(r)&&filtQ(r)&&filtE(r)&&filtFecha(r)});
   if(soloUltimo){
-    pn.sort(function(a,b){var da=a.bDt?a.bDt.getTime():0,db=b.bDt?b.bDt.getTime():0;return db-da});
+    pn.sort(function(a,b){var da=a.pub?a.pub.getTime():0,db=b.pub?b.pub.getTime():0;return db-da});
   }
   h+='<div class="sc">;; NOTAM</div>';
   if(pn.length){
     if(soloUltimo){
       h+='<div class="sm">'+pn.length+' NOTAMs ordenados del mas reciente al mas antiguo</div>';
       for(var si=0;si<pn.length;si++){var s=pn[si];
-        h+='<div class="grp"><div class="grp-hdr"><span>'+esc(s.code)+' &middot; '+esc(s.id)+'</span><span class="ac">'+(s.bDt?esc(s.bDt.toISOString().slice(0,10)):'')+'</span></div>';
+        h+='<div class="grp"><div class="grp-hdr"><span>'+esc(s.code)+' &middot; '+esc(s.id)+'</span><span class="ac">'+(s.pub?esc(s.pub.toLocaleDateString('es-PE')+' '+s.pub.toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'})):'')+'</span></div>';
         h+='<div class="ln n">'+esc(s.raw)+'</div></div>';}
     }else{
       var grp={},codes=[];
